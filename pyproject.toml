@@ -1,0 +1,28 @@
+[tool.poetry]
+name = "scripture-extract"
+version = "0.1.0"
+description = ""
+authors = ["gideonoludeyi <49620086+gideonoludeyi@users.noreply.github.com>"]
+readme = "README.md"
+
+[tool.poetry.scripts]
+start = "scripture_extract.__main__:main"
+split= "splitter:main"
+transcribe = "transcriber:main"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+speechrecognition = "^3.10.0"
+google-cloud-speech = "^2.21.0"
+pocketsphinx = "^5.0.2"
+pyaudio = "^0.2.13"
+
+
+[tool.poetry.group.dev.dependencies]
+autopep8 = "^2.0.4"
+python-dotenv = "^1.0.0"
+pydub = "^0.25.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
