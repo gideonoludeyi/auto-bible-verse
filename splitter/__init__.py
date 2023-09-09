@@ -16,6 +16,13 @@ def ms(seconds: int) -> int:
     return seconds * 1000
 
 
+def clip_filename(start_offset: int, end_offset: int, total_duration: int) -> str:
+    ndigits = len(str(int(total_duration)))
+    start = str(int(start_offset)).zfill(ndigits)
+    end = str(int(end_offset)).zfill(ndigits)
+    return f"clip_{start}s-{end}s"
+
+
 def main():
     args = parser.parse_args()
 
@@ -33,11 +40,11 @@ def main():
     while end_offset < audio.duration_seconds:
         new_segment = audio[ms(start_offset): ms(end_offset)]
         new_segment.export(output_dir.joinpath(
-            f"clip_{int(start_offset)}s-{int(end_offset)}s.wav"), format="wav")
+            f"{clip_filename(start_offset, end_offset, audio.duration_seconds)}.wav"), format="wav")
 
         start_offset += segment_duration / 2
         end_offset = start_offset + segment_duration
 
     new_segment = audio[ms(start_offset):]
     new_segment.export(output_dir.joinpath(
-        f"clip_{int(start_offset)}s-{int(audio.duration_seconds)}s.wav"), format="wav")
+        f"{clip_filename(start_offset, audio.duration_seconds, audio.duration_seconds)}.wav"), format="wav")
