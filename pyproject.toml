@@ -7,8 +7,9 @@ readme = "README.md"
 
 [tool.poetry.scripts]
 start = "scripture_extract.__main__:main"
-split= "splitter:main"
+split = "splitter:main"
 transcribe = "transcriber:main"
+ytdownload = "ytdownloader:main"
 
 [tool.poetry.dependencies]
 python = "^3.11"
@@ -22,6 +23,7 @@ pyaudio = "^0.2.13"
 autopep8 = "^2.0.4"
 python-dotenv = "^1.0.0"
 pydub = "^0.25.1"
+pytube = "^15.0.0"
 
 [build-system]
 requires = ["poetry-core"]
