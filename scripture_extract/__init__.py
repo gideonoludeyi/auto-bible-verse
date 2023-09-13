@@ -5,30 +5,30 @@ import os
 import speech_recognition as sr
 
 
-class SpeechRecognizer(abc.ABC):
+class SpeechTranscriber(abc.ABC):
     @abc.abstractmethod
-    def recognize(self, audio_data: sr.AudioData) -> str:
+    def transcribe(self, audio_data: sr.AudioData) -> str:
         pass
 
 
-class GoogleCloudSpeechRecognizer(SpeechRecognizer):
+class GoogleCloudSpeechTranscriber(SpeechTranscriber):
     def __init__(self, credentials_filepath: str) -> None:
         self._credentials_filepath = credentials_filepath
         self._speech_recognizer = sr.Recognizer()
 
-    def recognize(self, audio_data: sr.AudioData) -> str:
-        print("[GoogleCloudSpeechRecognizer] Got it! Now to recognize it...")
+    def transcribe(self, audio_data: sr.AudioData) -> str:
+        print("[GoogleCloudSpeechTranscriber] Got it! Now to recognize it...")
         return self._speech_recognizer.recognize_google_cloud(audio_data, credentials_json=self._credentials_filepath)
 
 
-class SphinxSpeechRecognizer(SpeechRecognizer):
+class SphinxSpeechTranscriber(SpeechTranscriber):
     def __init__(self, keywords: list[str] = None) -> None:
         self._speech_recognizer = sr.Recognizer()
         self._keywords = [(kw.lower(), 1)
                           for kw in keywords] if keywords is not None else None
 
-    def recognize(self, audio_data: sr.AudioData) -> str:
-        print("[SphinxSpeechRecognizer] Got it! Now to recognize it...")
+    def transcribe(self, audio_data: sr.AudioData) -> str:
+        print("[SphinxSpeechTranscriber] Got it! Now to recognize it...")
         return self._speech_recognizer.recognize_sphinx(audio_data, keyword_entries=self._keywords)
 
 
@@ -53,13 +53,13 @@ def main():
 
     with open('data/books.json') as f:
         books = json.load(fp=f)
-    recognizer = SphinxSpeechRecognizer(keywords=books)
+    transcriber = SphinxSpeechTranscriber(keywords=books)
     microphone = sr.Microphone()
 
     try:
         for audio_data in listen(microphone):
             try:
-                value = recognizer.recognize(audio_data)
+                value = transcriber.transcribe(audio_data)
                 print(f"Speech \"{value}\"")
             except sr.UnknownValueError:
                 print("Oops! Didn't catch that")
