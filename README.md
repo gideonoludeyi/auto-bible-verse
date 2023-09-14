@@ -8,10 +8,9 @@
 $ cp .env.example .env
 ```
 
-2. Setup Google Service Account Credentials
+2. Setup OpenAI API Key
 
-- create a `secrets` directory and place the Google Service Account Credentials JSON file in there
-- set the `GOOGLE_APPLICATION_CREDENTIALS_FILEPATH` env variable in `.env` to the path to the Google Service Account Credentials JSON file
+- set the `OPENAI_API_KEY` env variable in `.env` to the api key for your [openai account](https://platform.openai.com/account/api-keys).
 
 3. Install dependencies
 
