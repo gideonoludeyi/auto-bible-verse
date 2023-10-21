@@ -9,6 +9,7 @@ readme = "README.md"
 start = "scripture_extract.__main__:main"
 split = "splitter:main"
 transcribe = "transcriber:main"
+extract = "extractor:main"
 ytdownload = "ytdownloader:main"
 
 [tool.poetry.dependencies]

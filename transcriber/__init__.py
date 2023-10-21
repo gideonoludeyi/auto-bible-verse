@@ -13,7 +13,7 @@ parser = argparse.ArgumentParser(
 parser.add_argument(
     "filepath", help="filepath to the WAV audio file", type=pathlib.Path)
 parser.add_argument("-c", "--credentials", dest="credentials",
-                    help="OpenAI api key", required=True, type=pathlib.Path)
+                    help="OpenAI api key", required=True, type=str)
 
 
 def main():
@@ -24,7 +24,6 @@ def main():
         audio_data = recognizer.record(source)
 
     transcriber = OpenAIWhisperSpeechTranscriber(
-        prompt="A nigerian pastor preaching to a congregation in english",
         api_key=args.credentials)
 
     try:
