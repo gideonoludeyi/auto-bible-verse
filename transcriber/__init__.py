@@ -1,3 +1,4 @@
+import os
 import argparse
 import sys
 import pathlib
@@ -13,11 +14,14 @@ parser = argparse.ArgumentParser(
 parser.add_argument(
     "filepath", help="filepath to the WAV audio file", type=pathlib.Path)
 parser.add_argument("-c", "--credentials", dest="credentials",
-                    help="OpenAI api key", required=True, type=str)
+                    help="OpenAI api key", type=str,
+                    default=os.getenv("OPEN_API_KEY"))
 
 
 def main():
     args = parser.parse_args()
+
+    assert args.credentials is not None
 
     with sr.AudioFile(str(args.filepath)) as source:
         recognizer = sr.Recognizer()
