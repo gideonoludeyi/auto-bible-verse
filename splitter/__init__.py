@@ -5,7 +5,7 @@ import pathlib
 import pydub
 
 parser = argparse.ArgumentParser(
-    prog="Audio Splitter", description="splits a MP3 file into several overlapping segments in WAV format")
+    prog="Audio Splitter", description="splits a WAV file into several overlapping segments in WAV format")
 parser.add_argument("filename")
 parser.add_argument("-d", "--segment-duration",
                     dest="segment_duration", type=float, default=8.0)
@@ -38,7 +38,7 @@ def main():
     if not os.path.isdir(output_dir):
         os.mkdir(output_dir)
 
-    audio = pydub.AudioSegment.from_mp3(audio_filename)
+    audio = pydub.AudioSegment.from_wav(audio_filename)
 
     start = args.start_seconds
     end = min(args.end_seconds, audio.duration_seconds)

@@ -7,11 +7,11 @@ from concurrent.futures import ThreadPoolExecutor
 import pytube
 
 parser = argparse.ArgumentParser(
-    prog="YouTube Downloader", description="downloads an MP3 file of a youtube video")
+    prog="YouTube Downloader", description="downloads a youtube video in WAV format")
 parser.add_argument(
     "youtube_urls", help="URL of the youtube video", nargs="+")
 parser.add_argument("-o", "--output-dir", dest="output_dir",
-                    help="the directory to save the downloaded MP3 file", type=pathlib.Path, default="out")
+                    help="the directory to save the downloaded WAV file", type=pathlib.Path, default="out")
 parser.add_argument(
     "-w", "--workers", dest="n_workers", help="number of concurrent threads to use", type=int, default=5)
 
@@ -29,7 +29,7 @@ def download(url: str, out_dir: pathlib.Path) -> None:
     filename, _ = os.path.splitext(path)
 
     subprocess.run(
-        ["ffmpeg", "-i", path, f"{filename}.mp3", "-y", "-v", "error"])
+        ["ffmpeg", "-i", path, f"{filename}.wav", "-y", "-v", "error"])
 
     os.unlink(path)
 

@@ -4,31 +4,33 @@ import pathlib
 
 import speech_recognition as sr
 
+from scripture_extract.openai_whisper_speech_transcriber import (
+    OpenAIWhisperSpeechTranscriber
+)
+
 parser = argparse.ArgumentParser(
     prog="Speech to Text", description="transcribes a WAV audio file to text")
 parser.add_argument(
     "filepath", help="filepath to the WAV audio file", type=pathlib.Path)
 parser.add_argument("-c", "--credentials", dest="credentials",
-                    help="filepath to the Google Service Account Credentials JSON", required=True, type=pathlib.Path)
+                    help="OpenAI api key", required=True, type=pathlib.Path)
 
 
 def main():
     args = parser.parse_args()
 
-    audio_filepath = args.filepath
-    credentials_filepath = args.credentials
-
-    source = sr.AudioFile(str(audio_filepath))
-    recognizer = sr.Recognizer()
-
-    with source:
+    with sr.AudioFile(str(args.filepath)) as source:
+        recognizer = sr.Recognizer()
         audio_data = recognizer.record(source)
 
+    transcriber = OpenAIWhisperSpeechTranscriber(
+        prompt="A nigerian pastor preaching to a congregation in english",
+        api_key=args.credentials)
+
     try:
-        text = recognizer.recognize_google_cloud(
-            audio_data, credentials_json=str(credentials_filepath))
+        text = transcriber.transcribe(audio_data)
         print(text)
-    except sr.UnknownValueError:
-        print("Oops! didn't catch that")
+    except sr.UnknownValueError as e:
+        print(f"Oops! didn't catch that: {e}", file=sys.stderr)
     except sr.RequestError as e:
         print(e, file=sys.stderr)

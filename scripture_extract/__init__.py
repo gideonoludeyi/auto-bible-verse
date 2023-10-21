@@ -1,55 +1,9 @@
-import abc
 import os
-import tempfile
 
 import openai
 import speech_recognition as sr
 
-
-class SpeechTranscriber(abc.ABC):
-    @abc.abstractmethod
-    def transcribe(self, audio_data: sr.AudioData) -> str:
-        pass
-
-
-class GoogleCloudSpeechTranscriber(SpeechTranscriber):
-    def __init__(self, credentials_filepath: str) -> None:
-        self._credentials_filepath = credentials_filepath
-        self._speech_recognizer = sr.Recognizer()
-
-    def transcribe(self, audio_data: sr.AudioData) -> str:
-        print("[GoogleCloudSpeechTranscriber] Got it! Now to recognize it...")
-        return self._speech_recognizer.recognize_google_cloud(audio_data, credentials_json=self._credentials_filepath)
-
-
-class SphinxSpeechTranscriber(SpeechTranscriber):
-    def __init__(self, keywords: list[str] = None) -> None:
-        self._speech_recognizer = sr.Recognizer()
-        self._keywords = [(kw.lower(), 1)
-                          for kw in keywords] if keywords is not None else None
-
-    def transcribe(self, audio_data: sr.AudioData) -> str:
-        print("[SphinxSpeechTranscriber] Got it! Now to recognize it...")
-        return self._speech_recognizer.recognize_sphinx(audio_data, keyword_entries=self._keywords)
-
-
-class OpenAIWhisperSpeechTranscriber(SpeechTranscriber):
-    def __init__(self, *, prompt: str = "", api_key: str) -> None:
-        self._prompt = prompt
-        self._api_key = api_key
-
-    def transcribe(self, audio_data: sr.AudioData) -> str:
-        print("[OpenAIWhisperSpeechTranscriber] Got it! Now to transcribe it...")
-        with tempfile.NamedTemporaryFile(suffix=".wav") as audio_file:
-            audio_file.write(audio_data.get_wav_data())
-            audio_file.seek(0)
-            response = openai.Audio.transcribe(
-                model="whisper-1",
-                file=audio_file,
-                prompt=self._prompt,
-                api_key=self._api_key,
-            )
-        return response["text"]
+from .openai_whisper_speech_transcriber import OpenAIWhisperSpeechTranscriber
 
 
 class OpenAIChatCompletionScriptureInferer:
