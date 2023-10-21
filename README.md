@@ -23,3 +23,21 @@ $ poetry install
 ```sh
 $ poetry run start
 ```
+
+## Download YouTube Audio
+
+```sh
+$ poetry run ytdownload [YouTube Video URLs ...]
+```
+
+## Split audio into segments
+
+```sh
+$ poetry run split /path/to/audio [--segment-duration=8] [--output-dir=./out]
+```
+
+## Transcribe audio
+
+```sh
+$ poetry run transcribe /path/to/audio --credentials=[OpenAI API Key]
+```
