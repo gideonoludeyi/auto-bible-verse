@@ -27,7 +27,7 @@ $ poetry run start
 ## Download YouTube Audio
 
 ```sh
-$ poetry run ytdownload [YouTube Video URLs ...]
+$ poetry run download [YouTube Video URL] | ffmpeg -y -v error -i - audio.wav
 ```
 
 ## Split audio into segments

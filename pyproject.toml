@@ -10,7 +10,7 @@ start = "scripture_extract.__main__:main"
 split = "splitter:main"
 transcribe = "transcriber:main"
 extract = "extractor:main"
-ytdownload = "ytdownloader:main"
+download = "ytdownloader:main"
 
 [tool.poetry.dependencies]
 python = "^3.11"

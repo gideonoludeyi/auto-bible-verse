@@ -1,49 +1,42 @@
+import sys
 import argparse
-import os
 import pathlib
-import subprocess
-from concurrent.futures import ThreadPoolExecutor
+from typing import BinaryIO
 
 import pytube
 
 parser = argparse.ArgumentParser(
-    prog="YouTube Downloader", description="downloads a youtube video in WAV format")
+    prog="YouTube Downloader",
+    description="downloads a youtube video in MP4 format")
 parser.add_argument(
-    "youtube_urls", help="URL of the youtube video", nargs="+")
-parser.add_argument("-o", "--output-dir", dest="output_dir",
-                    help="the directory to save the downloaded WAV file", type=pathlib.Path, default="out")
+    "youtube_url",
+    help="URL of the youtube video")
 parser.add_argument(
-    "-w", "--workers", dest="n_workers", help="number of concurrent threads to use", type=int, default=5)
+    "-o", "--output",
+    dest="output_filepath",
+    help="the filepath to save the video. [default: output to stdout]",
+    type=pathlib.Path)
 
 
-def download(url: str, out_dir: pathlib.Path) -> None:
-    path = (
+def download(url: str, buffer: BinaryIO, extension: str = "mp4") -> None:
+    (
         pytube.YouTube(url).streams
-        .filter(progressive=True, file_extension="mp4")
+        .filter(progressive=True, file_extension=extension)
         .order_by("resolution")
         .desc()
         .first()
-        .download(out_dir)
+        .stream_to_buffer(buffer)
     )
-
-    filename, _ = os.path.splitext(path)
-
-    subprocess.run(
-        ["ffmpeg", "-i", path, f"{filename}.wav", "-y", "-v", "error"])
-
-    os.unlink(path)
 
 
 def main():
     args = parser.parse_args()
 
-    youtube_urls = set(args.youtube_urls)
-    output_dir = args.output_dir
-    n_workers = args.n_workers
+    youtube_url = args.youtube_url
+    output_filepath = args.output_filepath
 
-    if not output_dir.exists():
-        os.mkdir(output_dir)
-
-    with ThreadPoolExecutor(max_workers=n_workers) as executor:
-        for url in youtube_urls:
-            executor.submit(download, url, output_dir)
+    if output_filepath is None:
+        download(youtube_url, sys.stdout.buffer)
+    else:
+        with open(output_filepath, "wb") as f:
+            download(youtube_url, f, extension="mp4")
