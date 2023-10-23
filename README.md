@@ -39,7 +39,7 @@ $ poetry run split /path/to/audio [--segment-duration=8] [--output-dir=./out]
 ## Transcribe audio
 
 ```sh
-$ poetry run transcribe --credentials=[OpenAI API Key] /path/to/audio
+$ poetry run transcribe --credentials=[OpenAI API Key] --file=/path/to/audio
 ```
 
 ## Extract Scripture References from text transcript

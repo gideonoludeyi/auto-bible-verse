@@ -12,10 +12,13 @@ from scripture_extract.openai_whisper_speech_transcriber import (
 parser = argparse.ArgumentParser(
     prog="Speech to Text", description="transcribes a WAV audio file to text")
 parser.add_argument(
-    "filepath", help="filepath to the WAV audio file", type=pathlib.Path)
+    "-f", "--file",
+    dest="filepath",
+    help="filepath to the WAV audio file. [default: read from stdin]",
+    type=pathlib.Path)
 parser.add_argument("-c", "--credentials", dest="credentials",
                     help="OpenAI api key", type=str,
-                    default=os.getenv("OPEN_API_KEY"))
+                    default=os.getenv("OPENAI_API_KEY"))
 
 
 def main():
@@ -23,9 +26,13 @@ def main():
 
     assert args.credentials is not None
 
-    with sr.AudioFile(str(args.filepath)) as source:
-        recognizer = sr.Recognizer()
-        audio_data = recognizer.record(source)
+    recognizer = sr.Recognizer()
+    if args.filepath is not None:
+        with sr.AudioFile(str(args.filepath)) as source:
+            audio_data = recognizer.record(source)
+    else:
+        with sr.AudioFile(sys.stdin.buffer) as source:
+            audio_data = recognizer.record(source)
 
     transcriber = OpenAIWhisperSpeechTranscriber(
         api_key=args.credentials)
