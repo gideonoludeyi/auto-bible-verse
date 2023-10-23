@@ -1,3 +1,4 @@
+import sys
 import os
 import argparse
 
@@ -8,12 +9,18 @@ from scripture_extract.openai_chat_completion_scripture_inferer import (
 
 parser = argparse.ArgumentParser(
     prog="Scripture Reference Extractor",
-    description="Extract a list of scripture references from a text transcription")
+    description="Extract a list of scripture references from text")
 parser.add_argument(
-    "text", help="transcription from which to extract scripture references", type=str)
-parser.add_argument("-c", "--credentials", dest="credentials",
-                    help="OpenAI api key", type=str,
-                    default=os.getenv("OPENAI_API_KEY"))
+    "-t", "--text",
+    dest="text",
+    help="transcription from which to extract scripture references",
+    type=str)
+parser.add_argument(
+    "-c", "--credentials",
+    dest="credentials",
+    help="OpenAI api key",
+    type=str,
+    default=os.getenv("OPENAI_API_KEY"))
 
 
 def main():
@@ -21,7 +28,10 @@ def main():
 
     assert args.credentials is not None
 
-    text = args.text
+    if args.text is not None:
+        text = args.text
+    else:
+        text = "\n".join(sys.stdin)
 
     inferer = OpenAIChatCompletionScriptureInferer(
         api_key=args.credentials)

@@ -45,5 +45,5 @@ $ poetry run transcribe --credentials=[OpenAI API Key] --file=/path/to/audio
 ## Extract Scripture References from text transcript
 
 ```sh
-$ poetry run extract --credentials=[OpenAI API Key] "TEXT"
+$ poetry run extract --credentials=[OpenAI API Key] --text="TEXT"
 ```
