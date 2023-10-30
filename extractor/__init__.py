@@ -31,7 +31,7 @@ def main():
     if args.text is not None:
         text = args.text
     else:
-        text = "\n".join(sys.stdin)
+        text = "".join(sys.stdin)
 
     inferer = OpenAIChatCompletionScriptureInferer(
         api_key=args.credentials)
