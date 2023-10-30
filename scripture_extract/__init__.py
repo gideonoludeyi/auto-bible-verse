@@ -26,11 +26,14 @@ def listen(microphone: sr.Microphone, phrase_time_limit=5, timeout=10):
 
 
 def main():
+    api_key = os.getenv("OPENAI_API_KEY")
+    assert api_key is not None
+
     transcriber = OpenAIWhisperSpeechTranscriber(
-        api_key=os.getenv("OPENAI_API_KEY"))
+        api_key=api_key)
 
     scripture_inferer = OpenAIChatCompletionScriptureInferer(
-        api_key=os.getenv("OPENAI_API_KEY"))
+        api_key=api_key)
 
     microphone = sr.Microphone()
 
