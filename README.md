@@ -15,35 +15,35 @@ $ cp .env.example .env
 3. Install dependencies
 
 ```sh
-$ poetry install
+$ pdm install
 ```
 
 5. Start program
 
 ```sh
-$ poetry run start
+$ pdm run start
 ```
 
 ## Download YouTube Audio
 
 ```sh
-$ poetry run download [YouTube Video URL] | ffmpeg -y -v error -i - audio.wav
+$ pdm run download [YouTube Video URL] | ffmpeg -y -v error -i - audio.wav
 ```
 
 ## Split audio into segments
 
 ```sh
-$ poetry run split /path/to/audio [--segment-duration=8] [--output-dir=./out]
+$ pdm run split /path/to/audio [--segment-duration=8] [--output-dir=./out]
 ```
 
 ## Transcribe audio
 
 ```sh
-$ poetry run transcribe --credentials=[OpenAI API Key] --file=/path/to/audio
+$ pdm run transcribe --credentials=[OpenAI API Key] --file=/path/to/audio
 ```
 
 ## Extract Scripture References from text transcript
 
 ```sh
-$ poetry run extract --credentials=[OpenAI API Key] --text="TEXT"
+$ pdm run extract --credentials=[OpenAI API Key] --text="TEXT"
 ```
