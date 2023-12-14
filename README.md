@@ -18,7 +18,7 @@ $ cp .env.example .env
 $ pdm install
 ```
 
-5. Start program
+4. Start program
 
 ```sh
 $ pdm run start
