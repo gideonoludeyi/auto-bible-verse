@@ -6,22 +6,22 @@ from typing import BinaryIO
 import pytube
 
 parser = argparse.ArgumentParser(
-    prog="YouTube Downloader",
-    description="downloads a youtube video in MP4 format")
+    prog="YouTube Downloader", description="downloads a youtube video in MP4 format"
+)
+parser.add_argument("youtube_url", help="URL of the youtube video")
 parser.add_argument(
-    "youtube_url",
-    help="URL of the youtube video")
-parser.add_argument(
-    "-o", "--output",
+    "-o",
+    "--output",
     dest="output_filepath",
     help="the filepath to save the video. [default: output to stdout]",
-    type=pathlib.Path)
+    type=pathlib.Path,
+)
 
 
 def download(url: str, buffer: BinaryIO, extension: str = "mp4") -> None:
     (
-        pytube.YouTube(url).streams
-        .filter(progressive=True, file_extension=extension)
+        pytube.YouTube(url)
+        .streams.filter(progressive=True, file_extension=extension)
         .order_by("resolution")
         .desc()
         .first()

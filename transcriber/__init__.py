@@ -6,19 +6,27 @@ import pathlib
 import speech_recognition as sr
 
 from scripture_extract.openai_whisper_speech_transcriber import (
-    OpenAIWhisperSpeechTranscriber
+    OpenAIWhisperSpeechTranscriber,
 )
 
 parser = argparse.ArgumentParser(
-    prog="Speech to Text", description="transcribes a WAV audio file to text")
+    prog="Speech to Text", description="transcribes a WAV audio file to text"
+)
 parser.add_argument(
-    "-f", "--file",
+    "-f",
+    "--file",
     dest="filepath",
     help="filepath to the WAV audio file. [default: read from stdin]",
-    type=pathlib.Path)
-parser.add_argument("-c", "--credentials", dest="credentials",
-                    help="OpenAI api key", type=str,
-                    default=os.getenv("OPENAI_API_KEY"))
+    type=pathlib.Path,
+)
+parser.add_argument(
+    "-c",
+    "--credentials",
+    dest="credentials",
+    help="OpenAI api key",
+    type=str,
+    default=os.getenv("OPENAI_API_KEY"),
+)
 
 
 def main():
@@ -34,8 +42,7 @@ def main():
         with sr.AudioFile(sys.stdin.buffer) as source:
             audio_data = recognizer.record(source)
 
-    transcriber = OpenAIWhisperSpeechTranscriber(
-        api_key=args.credentials)
+    transcriber = OpenAIWhisperSpeechTranscriber(api_key=args.credentials)
 
     try:
         text = transcriber.transcribe(audio_data)

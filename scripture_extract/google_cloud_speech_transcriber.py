@@ -10,5 +10,5 @@ class GoogleCloudSpeechTranscriber(SpeechTranscriber):
 
     def transcribe(self, audio_data: sr.AudioData) -> str:
         return self._speech_recognizer.recognize_google_cloud(
-            audio_data,
-            credentials_json=self._credentials_filepath)
+            audio_data, credentials_json=self._credentials_filepath
+        )

@@ -5,16 +5,18 @@ import pathlib
 import pydub
 
 parser = argparse.ArgumentParser(
-    prog="Audio Splitter", description="splits a WAV file into several overlapping segments in WAV format")
+    prog="Audio Splitter",
+    description="splits a WAV file into several overlapping segments in WAV format",
+)
 parser.add_argument("filename")
-parser.add_argument("-d", "--segment-duration",
-                    dest="segment_duration", type=float, default=8.0)
-parser.add_argument("-o", "--output-dir", dest="output_dir",
-                    default="out", type=pathlib.Path)
-parser.add_argument("-s", "--start", dest="start_seconds",
-                    type=float, default=0.0)
-parser.add_argument("-e", "--end", dest="end_seconds",
-                    type=float, default=float("inf"))
+parser.add_argument(
+    "-d", "--segment-duration", dest="segment_duration", type=float, default=8.0
+)
+parser.add_argument(
+    "-o", "--output-dir", dest="output_dir", default="out", type=pathlib.Path
+)
+parser.add_argument("-s", "--start", dest="start_seconds", type=float, default=0.0)
+parser.add_argument("-e", "--end", dest="end_seconds", type=float, default=float("inf"))
 
 
 def ms(seconds: int) -> int:
@@ -46,13 +48,17 @@ def main():
     start_offset = start
     end_offset = start_offset + segment_duration
     while end_offset < end:
-        new_segment = audio[ms(start_offset): ms(end_offset)]
-        new_segment.export(output_dir.joinpath(
-            f"{clip_filename(start_offset, end_offset, end)}.wav"), format="wav")
+        new_segment = audio[ms(start_offset) : ms(end_offset)]
+        new_segment.export(
+            output_dir.joinpath(f"{clip_filename(start_offset, end_offset, end)}.wav"),
+            format="wav",
+        )
 
         start_offset += segment_duration / 2
         end_offset = start_offset + segment_duration
 
-    new_segment = audio[ms(start_offset):]
-    new_segment.export(output_dir.joinpath(
-        f"{clip_filename(start_offset, end, end)}.wav"), format="wav")
+    new_segment = audio[ms(start_offset) :]
+    new_segment.export(
+        output_dir.joinpath(f"{clip_filename(start_offset, end, end)}.wav"),
+        format="wav",
+    )

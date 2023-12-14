@@ -4,7 +4,7 @@ import speech_recognition as sr
 
 from .openai_whisper_speech_transcriber import OpenAIWhisperSpeechTranscriber
 from .openai_chat_completion_scripture_inferer import (
-    OpenAIChatCompletionScriptureInferer
+    OpenAIChatCompletionScriptureInferer,
 )
 
 
@@ -20,27 +20,24 @@ def listen(microphone: sr.Microphone, phrase_time_limit=5, timeout=10):
         with microphone as source:
             print("listening...")
             yield recognizer.listen(
-                source,
-                phrase_time_limit=phrase_time_limit,
-                timeout=timeout)
+                source, phrase_time_limit=phrase_time_limit, timeout=timeout
+            )
 
 
 def main():
     api_key = os.getenv("OPENAI_API_KEY")
     assert api_key is not None
 
-    transcriber = OpenAIWhisperSpeechTranscriber(
-        api_key=api_key)
+    transcriber = OpenAIWhisperSpeechTranscriber(api_key=api_key)
 
-    scripture_inferer = OpenAIChatCompletionScriptureInferer(
-        api_key=api_key)
+    scripture_inferer = OpenAIChatCompletionScriptureInferer(api_key=api_key)
 
     microphone = sr.Microphone()
 
     try:
         for audio_data in listen(microphone):
             value = transcriber.transcribe(audio_data)
-            print(f"Speech \"{value}\"")
+            print(f'Speech "{value}"')
             print(scripture_inferer.infer(value))
     except KeyboardInterrupt:
         pass
