@@ -1,7 +1,6 @@
 import os
 import argparse
 import sys
-import pathlib
 
 import speech_recognition as sr
 
@@ -15,9 +14,10 @@ parser = argparse.ArgumentParser(
 parser.add_argument(
     "-f",
     "--file",
-    dest="filepath",
-    help="filepath to the WAV audio file. [default: read from stdin]",
-    type=pathlib.Path,
+    dest="audiofile",
+    help="filepath to the WAV audio file. [default: read from stdin or use `-`]",
+    type=argparse.FileType("rb"),
+    default=sys.stdin.buffer,
 )
 parser.add_argument(
     "-c",
@@ -35,12 +35,8 @@ def main():
     assert args.credentials is not None
 
     recognizer = sr.Recognizer()
-    if args.filepath is not None:
-        with sr.AudioFile(str(args.filepath)) as source:
-            audio_data = recognizer.record(source)
-    else:
-        with sr.AudioFile(sys.stdin.buffer) as source:
-            audio_data = recognizer.record(source)
+    with sr.AudioFile(args.audiofile) as source:
+        audio_data = recognizer.record(source)
 
     transcriber = OpenAIWhisperSpeechTranscriber(api_key=args.credentials)
 
