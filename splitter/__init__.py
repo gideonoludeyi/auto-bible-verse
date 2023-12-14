@@ -1,14 +1,16 @@
-import os
 import argparse
+import os
 import pathlib
+import sys
+import wave
 
-import pydub
+import speech_recognition as sr
 
 parser = argparse.ArgumentParser(
     prog="Audio Splitter",
     description="splits a WAV file into several overlapping segments in WAV format",
 )
-parser.add_argument("filename")
+parser.add_argument("audio_file", type=argparse.FileType("rb"))
 parser.add_argument(
     "-d", "--segment-duration", dest="segment_duration", type=float, default=8.0
 )
@@ -23,42 +25,41 @@ def ms(seconds: int) -> int:
     return seconds * 1000
 
 
-def clip_filename(start_offset: int, end_offset: int, total_duration: int) -> str:
-    ndigits = len(str(int(total_duration)))
-    start = str(int(start_offset)).zfill(ndigits)
-    end = str(int(end_offset)).zfill(ndigits)
-    return f"clip_{start}s-{end}s"
-
-
-def main():
+def main() -> int:
     args = parser.parse_args()
 
-    audio_filename = args.filename
+    audio_file = args.audio_file
     segment_duration = args.segment_duration
     output_dir = args.output_dir
 
     if not os.path.isdir(output_dir):
         os.mkdir(output_dir)
 
-    audio = pydub.AudioSegment.from_wav(audio_filename)
+    with sr.AudioFile(audio_file) as source:
+        audio_data = sr.Recognizer().record(source)
 
     start = args.start_seconds
-    end = min(args.end_seconds, audio.duration_seconds)
+    end = start + segment_duration
+    while end <= args.end_seconds:
+        segment = audio_data.get_segment(ms(start), ms(end))
+        if audio := segment.get_raw_data():
+            with wave.open(
+                str(output_dir.joinpath(f"clip_{start}s-{end}s.wav")), "wb"
+            ) as wavfile:
+                wavfile.setparams(
+                    # see https://docs.python.org/3/library/wave.html#wave.Wave_write.setparams
+                    # (nchannels, sampwidth, framerate, nframes, comptype, compname)
+                    # nchannels is 1 because `AudioData` is mono
+                    (1, segment.sample_width, segment.sample_rate, 0, "NONE", "NONE")
+                )
+                wavfile.writeframes(audio)
 
-    start_offset = start
-    end_offset = start_offset + segment_duration
-    while end_offset < end:
-        new_segment = audio[ms(start_offset) : ms(end_offset)]
-        new_segment.export(
-            output_dir.joinpath(f"{clip_filename(start_offset, end_offset, end)}.wav"),
-            format="wav",
-        )
+            start += segment_duration // 2
+            end = start + segment_duration
+        else:
+            break
+    return 0
 
-        start_offset += segment_duration / 2
-        end_offset = start_offset + segment_duration
 
-    new_segment = audio[ms(start_offset) :]
-    new_segment.export(
-        output_dir.joinpath(f"{clip_filename(start_offset, end, end)}.wav"),
-        format="wav",
-    )
+if __name__ == "__main__":
+    sys.exit(main())

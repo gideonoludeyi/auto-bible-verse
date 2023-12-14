@@ -5,7 +5,7 @@
 groups = ["default", "dev"]
 strategy = ["cross_platform"]
 lock_version = "4.4"
-content_hash = "sha256:206f7d8cae3388038f37782818dd2c21b0f4719e2d084ee619e5217416508ae9"
+content_hash = "sha256:dd5dcd1378a28f97480d89e4fd38f1cdd4e1153d92e9123fda92598a1010885f"
 
 [[package]]
 name = "aiohttp"
@@ -471,15 +471,6 @@ summary = "C parser in Python"
 files = [
     {file = "pycparser-2.21-py2.py3-none-any.whl", hash = "sha256:8ee45429555515e1f6b185e78100aea234072576aa43ab53aefcae078162fca9"},
     {file = "pycparser-2.21.tar.gz", hash = "sha256:e644fdec12f7872f86c58ff790da456218b10f863970249516d60a5eaca77206"},
-]
-
-[[package]]
-name = "pydub"
-version = "0.25.1"
-summary = "Manipulate audio with an simple and easy high level interface"
-files = [
-    {file = "pydub-0.25.1-py2.py3-none-any.whl", hash = "sha256:65617e33033874b59d87db603aa1ed450633288aefead953b30bded59cb599a6"},
-    {file = "pydub-0.25.1.tar.gz", hash = "sha256:980a33ce9949cab2a569606b65674d748ecbca4f0796887fd6f46173a7b0d30f"},
 ]
 
 [[package]]
