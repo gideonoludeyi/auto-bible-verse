@@ -37,6 +37,7 @@ dev = [
     "pydub<1.0.0,>=0.25.1",
     "pytube<16.0.0,>=15.0.0",
     "ruff<1.0.0",
+    "pyright>=1.1.340",
 ]
 
 [tool.pdm.build]
