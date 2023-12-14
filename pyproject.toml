@@ -27,13 +27,19 @@ requires = ["pdm-backend"]
 build-backend = "pdm.backend"
 
 [tool.pdm]
+[tool.pdm.scripts]
+format = "ruff format ."
+lint = "ruff check ."
+
 [tool.pdm.dev-dependencies]
 dev = [
-    "autopep8<3.0.0,>=2.0.4",
     "python-dotenv<2.0.0,>=1.0.0",
     "pydub<1.0.0,>=0.25.1",
     "pytube<16.0.0,>=15.0.0",
+    "ruff<1.0.0",
 ]
 
 [tool.pdm.build]
 includes = []
+
+
