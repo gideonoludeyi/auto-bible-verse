@@ -45,5 +45,5 @@ $ pdm run transcribe --credentials=[OpenAI API Key] --file=/path/to/audio
 ## Extract Scripture References from text transcript
 
 ```sh
-$ pdm run extract --credentials=[OpenAI API Key] --text="TEXT"
+$ pdm run extract --credentials=[OpenAI API Key] --file=/path/to/transcription_file
 ```

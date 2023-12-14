@@ -12,11 +12,12 @@ parser = argparse.ArgumentParser(
     description="Extract a list of scripture references from text",
 )
 parser.add_argument(
-    "-t",
-    "--text",
-    dest="text",
-    help="transcription from which to extract scripture references",
-    type=str,
+    "-f",
+    "--file",
+    dest="textfile",
+    help="transcription file from which to extract scripture references [default: read from stdin or use `-`]",
+    type=argparse.FileType("r"),
+    default=sys.stdin,
 )
 parser.add_argument(
     "-c",
@@ -28,17 +29,17 @@ parser.add_argument(
 )
 
 
-def main():
+def main() -> int:
     args = parser.parse_args()
-
     assert args.credentials is not None
 
-    if args.text is not None:
-        text = args.text
-    else:
-        text = "".join(sys.stdin)
-
     inferer = OpenAIChatCompletionScriptureInferer(api_key=args.credentials)
+    with args.textfile as f:
+        result = inferer.infer(f.read())
 
-    result = inferer.infer(text)
     print(result)
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
