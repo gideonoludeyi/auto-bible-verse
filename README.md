@@ -1,4 +1,4 @@
-# Automated Bible Verse (Speech-To-Text)
+# Script: Automated Bible Verse (Speech-To-Text)
 
 ## Getting Started
 
