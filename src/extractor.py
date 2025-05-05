@@ -2,7 +2,7 @@ import sys
 import os
 import argparse
 
-from scripture_extract.openai_chat_completion_scripture_inferer import (
+from autoscript.openai_chat_completion_scripture_inferer import (
     OpenAIChatCompletionScriptureInferer,
 )
 

@@ -4,7 +4,7 @@ from .speech_transcriber import SpeechTranscriber
 
 
 class SphinxSpeechTranscriber(SpeechTranscriber):
-    def __init__(self, keywords: list[str] = None) -> None:
+    def __init__(self, keywords: list[str] | None = None) -> None:
         self._speech_recognizer = sr.Recognizer()
         self._keywords = (
             [(kw.lower(), 1) for kw in keywords] if keywords is not None else None

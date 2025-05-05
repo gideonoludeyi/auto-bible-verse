@@ -4,7 +4,7 @@ import sys
 
 import speech_recognition as sr
 
-from scripture_extract.openai_whisper_speech_transcriber import (
+from autoscript.openai_whisper_speech_transcriber import (
     OpenAIWhisperSpeechTranscriber,
 )
 

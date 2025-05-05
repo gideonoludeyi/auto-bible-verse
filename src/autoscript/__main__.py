@@ -1,30 +1,18 @@
 import os
 
 import speech_recognition as sr
+from dotenv import load_dotenv
 
-from .openai_whisper_speech_transcriber import OpenAIWhisperSpeechTranscriber
+from . import listen
 from .openai_chat_completion_scripture_inferer import (
     OpenAIChatCompletionScriptureInferer,
 )
-
-
-def listen(microphone: sr.Microphone, phrase_time_limit=5, timeout=10):
-    recognizer = sr.Recognizer()
-
-    print("A moment of silence...")
-    with microphone as source:
-        recognizer.adjust_for_ambient_noise(source)
-    print(f"Set minimum energy threshold to {recognizer.energy_threshold}")
-
-    while True:
-        with microphone as source:
-            print("listening...")
-            yield recognizer.listen(
-                source, phrase_time_limit=phrase_time_limit, timeout=timeout
-            )
+from .openai_whisper_speech_transcriber import OpenAIWhisperSpeechTranscriber
 
 
 def main():
+    load_dotenv()
+
     api_key = os.getenv("OPENAI_API_KEY")
     assert api_key is not None
 
@@ -41,3 +29,6 @@ def main():
             print(scripture_inferer.infer(value))
     except KeyboardInterrupt:
         pass
+
+if __name__ == "__main__":
+    main()
